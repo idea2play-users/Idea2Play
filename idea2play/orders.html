@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Orders – Idea2Play</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>My Orders</h2>
+
+<div id="orderForm" style="display:none">
+  <h3>Place Order</h3>
+
+  <input id="name" placeholder="Full name">
+  <input id="address" placeholder="Address">
+  <input id="email" placeholder="Email">
+  <button id="submitOrder">Submit Order</button>
+</div>
+
+<div id="orderList"></div>
+
+<script type="module">
+import { auth, db, protectPage } from "./js/firebase.js";
+import {
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+protectPage();
+
+const params = new URLSearchParams(location.search);
+const isNew = params.get("new");
+
+const orderForm = document.getElementById("orderForm");
+const orderList = document.getElementById("orderList");
+
+if (isNew) orderForm.style.display = "block";
+
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  // LIST ORDERS
+  const q = query(
+    collection(db, "orders"),
+    where("userId", "==", user.uid)
+  );
+
+  const snap = await getDocs(q);
+  snap.forEach(doc => {
+    const o = doc.data();
+   orderList.innerHTML += `
+  <div class="order-card">
+    <h4>${o.projectTitle}</h4>
+    <p>Status: <strong>${o.status.replace("_", " ")}</strong></p>
+  </div>
+`;
+
+  });
+});
+
+submitOrder.onclick = async () => {
+  const user = auth.currentUser;
+  if (!user) return;
+
+  await addDoc(collection(db, "orders"), {
+    userId: user.uid,
+    projectId: localStorage.getItem("orderProjectId"),
+    projectTitle: localStorage.getItem("orderProjectTitle"),
+    name: name.value,
+    address: address.value,
+    email: email.value,
+    status: "pending",
+    createdAt: serverTimestamp()
+  });
+
+  localStorage.removeItem("orderProjectId");
+  localStorage.removeItem("orderProjectTitle");
+
+  alert("Order placed!");
+  location.href = "orders.html";
+};
+</script>
+<script type="module">
+  import { protectPage } from "./js/firebase.js";
+  protectPage();
+</script>
+
+</body>
+</html>

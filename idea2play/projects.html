@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Projects – Idea2Play</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<h2>My Projects</h2>
+<div id="projectList"></div>
+
+<script type="module">
+import { auth, db, protectPage } from "./js/firebase.js";
+import {
+  collection,
+  query,
+  where,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+protectPage();
+
+window.orderProject = (id, title) => {
+  localStorage.setItem("orderProjectId", id);
+  localStorage.setItem("orderProjectTitle", title);
+  location.href = "orders.html?new=true";
+};
+
+auth.onAuthStateChanged(async user => {
+  if (!user) return;
+
+  const q = query(
+    collection(db, "projects"),
+    where("ownerId", "==", user.uid)
+  );
+
+  const snap = await getDocs(q);
+  const list = document.getElementById("projectList");
+
+  snap.forEach(doc => {
+    const p = doc.data();
+    list.innerHTML += `
+  <div class="project-card">
+<button onclick="orderProject('${doc.id}', '${p.title}')">
+  Place Order
+</button>
+    <h3>${p.title}</h3>
+
+    <button onclick="openProject('${doc.id}')">Edit</button>
+
+    ${
+      p.published
+        ? <span class="badge">Published</span>
+        : <button onclick="publishProject('${doc.id}')">Publish to Gallery</button>
+    }
+  </div>
+`;
+  });
+});
+
+window.openProject = id => {
+  location.href = studio.html?project=${id};
+};
+import {
+  doc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+window.publishProject = async (id) => {
+  const ref = doc(db, "projects", id);
+  await updateDoc(ref, {
+    published: true
+  });
+  alert("Project published!");
+  location.reload();
+};
+</script>
+</body>
+</html>
