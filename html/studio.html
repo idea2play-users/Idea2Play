@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Design Studio – Idea2Play</title>
+  <link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="/css/navbar.css">
+
+</head>
+<body class="studio-body">
+
+<header class="studio-header">
+  <img src="assets/logo.png" class="logo">
+  <button onclick="logoutUser()">Logout</button>
+</header>
+
+<main class="studio-layout">
+
+  <aside class="studio-sidebar">
+    <input id="title" placeholder="Game title">
+    <button id="save">Save Project</button>
+  </aside>
+
+  <section class="studio-chat">
+    <div id="chat" class="chat-stream">
+      <div class="chat-bubble ai">Describe your game idea.</div>
+    </div>
+    <div class="chat-input">
+      <input id="msg" placeholder="Type...">
+      <button id="send">Send</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="js/studio.js"></script>
+<script type="module">
+  import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const params = new URLSearchParams(location.search);
+const projectId = params.get("project");
+
+if (projectId) {
+  const ref = doc(db, "projects", projectId);
+  const snap = await getDoc(ref);
+
+  if (snap.exists()) {
+    const data = snap.data();
+    title.value = data.title;
+    chat.innerHTML = "";
+    chatHistory = data.chat || [];
+
+    chatHistory.forEach(m => {
+      chat.innerHTML += `
+        <div class="chat-bubble ${m.role}">
+          ${m.text}
+        </div>`;
+    });
+  }
+}
+<script type="module" src="/js/navbar.js"></script>
+
+</body>
+</html>

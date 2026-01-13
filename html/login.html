@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Login – Idea2Play</title>
+  <link rel="stylesheet" href="css/style.css"> <link rel="stylesheet" href="/css/navbar.css">
+
+</head>
+<body class="auth-body">
+
+<div class="auth-box">
+  <h2>Login or Sign Up</h2>
+  <input id="email" placeholder="Email">
+  <input id="password" type="password" placeholder="Password">
+  <button id="login">Login</button>
+  <button id="register">Sign Up</button>
+</div>
+
+<script type="module">
+  import { login, register } from "./js/firebase.js";
+
+  login.onclick = () =>
+    login(email.value, password.value)
+      .then(() => location.href = "index.html")
+      .catch(e => alert(e.message));
+
+  register.onclick = () =>
+    register(email.value, password.value)
+      .then(() => location.href = "index.html")
+      .catch(e => alert(e.message));
+</script>
+<script type="module" src="/js/navbar.js"></script>
+
+</body>
+</html>

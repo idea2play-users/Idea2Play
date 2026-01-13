@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Gallery – Idea2Play</title>
+  <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="/css/navbar.css">
+
+</head>
+<body>
+
+<h1>Community Gallery</h1>
+<p>Discover games created with Idea2Play.</p>
+
+<div id="galleryGrid"></div>
+
+<script type="module">
+import { db } from "./js/firebase.js";
+import {
+  collection,
+  query,
+  where,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const q = query(
+  collection(db, "projects"),
+  where("published", "==", true)
+);
+
+const snap = await getDocs(q);
+const grid = document.getElementById("galleryGrid");
+
+snap.forEach(doc => {
+  const p = doc.data();
+  grid.innerHTML += `
+    <div class="gallery-card">
+      <h3>${p.title}</h3>
+      <p>Created with Idea2Play</p>
+    </div>
+  `;
+});
+</script>
+<script type="module" src="/js/navbar.js"></script>
+
+</body>
+</html>

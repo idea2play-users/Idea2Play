@@ -23,11 +23,17 @@ import {
   signOut
 } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-const app = initializeApp({
-  apiKey: "YOUR_KEY",
-  authDomain: "YOUR_DOMAIN",
-  projectId: "YOUR_ID"
-});
+const firebaseConfig = {
+    apiKey: "AIzaSyDjwcAdI0ml4Ckb26ti0PXPnbqquQj5MYo",
+    authDomain: "idea2play-7a07c.firebaseapp.com",
+    projectId: "idea2play-7a07c",
+    storageBucket: "idea2play-7a07c.firebasestorage.app",
+    messagingSenderId: "964404277928",
+    appId: "1:964404277928:web:f448285bbe6819d99e089d",
+    measurementId: "G-QXV84VBD34"
+  };
+
+const app = initializeApp(firebaseConfig););
 
 export const auth = getAuth(app);
 
