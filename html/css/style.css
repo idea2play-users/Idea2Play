@@ -8,12 +8,7 @@
 html, body {
   font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   color: #1f2937;
-  background: linear-gradient(
-    135deg,
-    #fdf2f8,
-    #fefce8,
-    #ecfeff
-  );
+  background: linear-gradient(135deg, #fdf2f8, #fefce8, #ecfeff);
   min-height: 100vh;
 }
 
@@ -28,95 +23,6 @@ body::before {
   background-size: 32px 32px;
   pointer-events: none;
   z-index: -1;
-}
-/* ====== NAVBAR ====== */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 48px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  font-size: 20px;
-  color: #7c3aed;
-  text-decoration: none;
-}
-
-.logo img {
-  height: 36px;
-}
-
-.nav-links {
-  display: flex;
-  gap: 28px;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #374151;
-  font-weight: 500;
-  padding: 8px 14px;
-  border-radius: 999px;
-  transition: background 0.2s, color 0.2s;
-}
-
-.nav-links a.active,
-.nav-links a:hover {
-  background: #ede9fe;
-  color: #7c3aed;
-}
-
-/* ====== NAVBAR ====== */
-.navbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 48px;
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(0,0,0,0.05);
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 700;
-  font-size: 20px;
-  color: #7c3aed;
-  text-decoration: none;
-}
-
-.logo img {
-  height: 36px;
-}
-
-.nav-links {
-  display: flex;
-  gap: 28px;
-}
-
-.nav-links a {
-  text-decoration: none;
-  color: #374151;
-  font-weight: 500;
-  padding: 8px 14px;
-  border-radius: 999px;
-  transition: background 0.2s, color 0.2s;
-}
-
-.nav-links a.active,
-.nav-links a:hover {
-  background: #ede9fe;
-  color: #7c3aed;
 }
 
 /* ====== HERO ====== */
@@ -167,14 +73,6 @@ body::before {
 }
 
 @media (max-width: 768px) {
-  .navbar {
-    padding: 16px 20px;
-  }
-
-  .nav-links {
-    display: none; /* later: hamburger */
-  }
-
   .hero p {
     font-size: 16px;
   }

@@ -1,21 +1,17 @@
 import Stripe from "stripe";
-import { db } from "./firebaseAdmin";
-import bodyParser from "body-parser";
+import { db } from "./firebaseAdmin.js";
+
+export const config = { api: { bodyParser: false } };
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
-export const config = {
-  api: { bodyParser: false }
-};
-
 export default async function handler(req, res) {
   const sig = req.headers["stripe-signature"];
+  let rawBody = "";
 
-  const rawBody = await new Promise((resolve, reject) => {
-    let data = "";
-    req.on("data", chunk => (data += chunk));
-    req.on("end", () => resolve(data));
-  });
+  for await (const chunk of req) {
+    rawBody += chunk;
+  }
 
   let event;
   try {
@@ -25,7 +21,7 @@ export default async function handler(req, res) {
       process.env.STRIPE_WEBHOOK_SECRET
     );
   } catch (err) {
-    return res.status(400).send(`Webhook Error`);
+    return res.status(400).send("Webhook Error");
   }
 
   if (event.type === "checkout.session.completed") {
@@ -35,7 +31,7 @@ export default async function handler(req, res) {
       projectId: session.metadata.projectId,
       amount: session.amount_total,
       status: "paid",
-      createdAt: new Date()
+      createdAt: new Date(),
     });
   }
 

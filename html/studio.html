@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Design Studio – Idea2Play</title>
-  <link rel="stylesheet" href="css/style.css"><link rel="stylesheet" href="/css/navbar.css">
-
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/navbar.css">
 </head>
 <body class="studio-body">
 
 <header class="studio-header">
-  <img src="assets/logo.png" class="logo">
-  <button onclick="logoutUser()">Logout</button>
+  <img src="./assets/logo.png" class="logo" alt="Logo">
+  <button id="logoutBtn">Logout</button>
 </header>
 
 <main class="studio-layout">
-
   <aside class="studio-sidebar">
     <input id="title" placeholder="Game title">
     <button id="save">Save Project</button>
@@ -28,38 +29,41 @@
       <button id="send">Send</button>
     </div>
   </section>
-
 </main>
 
-<script src="js/studio.js"></script>
 <script type="module">
-  import {
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { db, logoutUser } from "./js/firebase.js";
+  import { doc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-const params = new URLSearchParams(location.search);
-const projectId = params.get("project");
+  document.getElementById("logoutBtn").onclick = logoutUser;
 
-if (projectId) {
-  const ref = doc(db, "projects", projectId);
-  const snap = await getDoc(ref);
+  async function loadProject() {
+    const params = new URLSearchParams(location.search);
+    const projectId = params.get("project");
+    if (!projectId) return;
 
-  if (snap.exists()) {
+    const ref = doc(db, "projects", projectId);
+    const snap = await getDoc(ref);
+
+    if (!snap.exists()) return;
+
     const data = snap.data();
     title.value = data.title;
     chat.innerHTML = "";
-    chatHistory = data.chat || [];
 
-    chatHistory.forEach(m => {
+    (data.chat || []).forEach(m => {
       chat.innerHTML += `
         <div class="chat-bubble ${m.role}">
           ${m.text}
-        </div>`;
+        </div>
+      `;
     });
   }
-}
-<script type="module" src="/js/navbar.js"></script>
 
+  loadProject();
+</script>
+
+<script src="./js/studio.js"></script>
+<script type="module" src="./js/navbar.js"></script>
 </body>
 </html>

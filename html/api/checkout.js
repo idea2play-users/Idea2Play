@@ -1,5 +1,4 @@
 import Stripe from "stripe";
-import { db } from "./firebaseAdmin";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
@@ -9,26 +8,19 @@ export default async function handler(req, res) {
   const { projectId } = req.body;
 
   const session = await stripe.checkout.sessions.create({
-    payment_method_types: ["card"],
     mode: "payment",
-    line_items: [
-      {
-        price_data: {
-          currency: "usd",
-          product_data: {
-            name: "Game Development Order",
-            description: `Project ID: ${projectId}`
-          },
-          unit_amount: 5000 // $50
-        },
-        quantity: 1
-      }
-    ],
+    payment_method_types: ["card"],
+    line_items: [{
+      price_data: {
+        currency: "usd",
+        product_data: { name: "Game Order" },
+        unit_amount: 5000,
+      },
+      quantity: 1,
+    }],
     success_url: `${req.headers.origin}/success.html`,
     cancel_url: `${req.headers.origin}/cancel.html`,
-    metadata: {
-      projectId
-    }
+    metadata: { projectId },
   });
 
   res.json({ id: session.id });

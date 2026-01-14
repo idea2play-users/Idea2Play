@@ -1,9 +1,11 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Login – Idea2Play</title>
-  <link rel="stylesheet" href="css/style.css"> <link rel="stylesheet" href="/css/navbar.css">
-
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/navbar.css">
 </head>
 <body class="auth-body">
 
@@ -11,24 +13,29 @@
   <h2>Login or Sign Up</h2>
   <input id="email" placeholder="Email">
   <input id="password" type="password" placeholder="Password">
-  <button id="login">Login</button>
-  <button id="register">Sign Up</button>
+  <button id="loginBtn">Login</button>
+  <button id="registerBtn">Sign Up</button>
 </div>
 
 <script type="module">
-  import { login, register } from "./js/firebase.js";
+  import { loginUser, registerUser } from "./js/firebase.js";
 
-  login.onclick = () =>
-    login(email.value, password.value)
-      .then(() => location.href = "index.html")
+  const email = document.getElementById("email");
+  const password = document.getElementById("password");
+  const loginBtn = document.getElementById("loginBtn");
+  const registerBtn = document.getElementById("registerBtn");
+
+  loginBtn.onclick = () =>
+    loginUser(email.value, password.value)
+      .then(() => location.href = "./index.html")
       .catch(e => alert(e.message));
 
-  register.onclick = () =>
-    register(email.value, password.value)
-      .then(() => location.href = "index.html")
+  registerBtn.onclick = () =>
+    registerUser(email.value, password.value)
+      .then(() => location.href = "./index.html")
       .catch(e => alert(e.message));
 </script>
-<script type="module" src="/js/navbar.js"></script>
 
+<script type="module" src="./js/navbar.js"></script>
 </body>
 </html>
